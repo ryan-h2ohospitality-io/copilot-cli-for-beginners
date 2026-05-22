@@ -44,6 +44,7 @@ safe-outputs:
     protected-files: allowed
     allowed-files:
       - "translations/**/*.md"
+      - "translations/**/.co-op-translator.json"
     if-no-changes: "ignore"
     max: 1
     github-token: ${{ secrets.GH_AW_GITHUB_TOKEN }}
@@ -127,7 +128,7 @@ Do not edit:
 9. Perform a final review of each changed target-language file against its English source file. Grade each file using A, A-, B+, B, B-, C, D, or F.
 10. Continue improving the translation until every changed target-language file earns **A- or higher**.
 11. If any changed target-language file remains below A- after reasonable polishing, do not push changes and do not add the `translation-polished` label. Update the pull request body with `Translation status: Needs polish` and include the blocking issues and current file grades in the managed review section.
-12. Review your final diff. If it contains anything outside `translations/**/*.md`, revert those changes.
+12. Review your final diff. If it contains anything outside `translations/**/*.md` or Co-op metadata files named `translations/**/.co-op-translator.json`, revert those changes.
 13. Push your changes to the target pull request branch using the safe output only when every changed target-language file is A- or higher.
 14. Update the pull request body with a final per-file grade table using the instructions in **Pull request body update**.
 15. Add the `translation-polished` label only when every changed target-language file is A- or higher.
