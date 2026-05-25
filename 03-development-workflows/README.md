@@ -177,6 +177,22 @@ copilot
 
 > 💡 **Tip**: The code-review agent works best when you have pending changes. Stage your files with `git add` for more focused reviews.
 
+### Using the /security-review Command
+
+The `/security-review` command is a dedicated slash command that analyzes your code changes specifically for **security vulnerabilities** — things like exposed secrets, injection risks, or insecure patterns. Think of it as a security-focused companion to `/review`.
+
+```bash
+copilot
+
+> /security-review
+# Scans staged/unstaged changes for security vulnerabilities
+# Flags issues like exposed credentials, injection risks, and insecure patterns
+```
+
+> 💡 **When to use `/security-review`**: Run it before committing code that handles user input, authentication, file access, or network requests. It's especially useful when you're not sure if your changes introduced a security risk.
+
+> 🔒 **Bonus**: GitHub Copilot CLI also automatically scans your commit messages and pull request descriptions for accidentally included secrets (like API keys or passwords) and redacts them before they're published.
+
 </details>
 
 ---
