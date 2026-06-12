@@ -1,7 +1,9 @@
 import json
+import datetime
 from dataclasses import dataclass, asdict
 from typing import List, Optional
 
+# Path to JSON data file. Existing data may use year == 0 to denote unknown.
 DATA_FILE = "data.json"
 
 
@@ -46,11 +48,13 @@ class BookCollection:
         """
         if not isinstance(title, str) or not title.strip():
             raise ValueError("title must be a non-empty string")
-        import datetime
+        # Normalize author: allow empty string if None or non-string provided.
+        if not isinstance(author, str):
+            author = ""
         current_year = datetime.date.today().year
-        # Enforce a publication year between 1 and the current year (inclusive).
-        if not isinstance(year, int) or year < 1:
-            raise ValueError(f"year must be an integer between 1 and {current_year} (inclusive)")
+        # Allow 0 to represent an unknown publication year; otherwise require 1..current_year.
+        if not isinstance(year, int) or year < 0:
+            raise ValueError("year must be a non-negative integer (0 means unknown)")
         if year > current_year:
             raise ValueError(f"year cannot be in the future (max {current_year})")
 
