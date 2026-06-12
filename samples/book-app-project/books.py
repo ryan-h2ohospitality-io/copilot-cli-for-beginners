@@ -44,6 +44,28 @@ class BookCollection:
     def list_books(self) -> List[Book]:
         return self.books
 
+    def list_by_year(self, start: int, end: int) -> List[Book]:
+        """Return books with publication year in the inclusive range [start, end].
+
+        Args:
+            start (int): Start year (inclusive).
+            end (int): End year (inclusive).
+
+        Returns:
+            List[Book]: List of books whose .year falls between start and end.
+
+        Raises:
+            TypeError: If start or end is not an int.
+        """
+        if not isinstance(start, int) or not isinstance(end, int):
+            raise TypeError("start and end must be integers")
+
+        # Normalize range so callers don't need to pre-order arguments.
+        if start > end:
+            start, end = end, start
+
+        return [b for b in self.books if start <= b.year <= end]
+
     def find_book_by_title(self, title: str) -> Optional[Book]:
         for book in self.books:
             if book.title.lower() == title.lower():

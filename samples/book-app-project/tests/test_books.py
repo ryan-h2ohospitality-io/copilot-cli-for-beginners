@@ -51,3 +51,48 @@ def test_remove_book_invalid():
     collection = BookCollection()
     result = collection.remove_book("Nonexistent Book")
     assert result is False
+
+
+def test_list_by_year_normal():
+    collection = BookCollection()
+    collection.add_book("Old Book", "Author A", 1990)
+    collection.add_book("Millennium Book", "Author B", 2000)
+    collection.add_book("Modern Book", "Author C", 2010)
+
+    results = collection.list_by_year(1995, 2005)
+    titles = [b.title for b in results]
+    assert titles == ["Millennium Book"]
+
+
+def test_list_by_year_empty():
+    collection = BookCollection()
+    collection.add_book("Ancient", "A", 1800)
+
+    results = collection.list_by_year(1900, 1950)
+    assert results == []
+
+
+def test_list_by_year_single_year():
+    collection = BookCollection()
+    collection.add_book("Single", "A", 2001)
+
+    results = collection.list_by_year(2001, 2001)
+    assert len(results) == 1
+    assert results[0].title == "Single"
+
+
+def test_list_by_year_swapped():
+    collection = BookCollection()
+    collection.add_book("StartYear", "A", 1995)
+    collection.add_book("EndYear", "B", 2005)
+
+    # pass end first; function should swap and still return both if in range
+    results = collection.list_by_year(2005, 1990)
+    titles = [b.title for b in results]
+    assert "StartYear" in titles and "EndYear" in titles
+
+
+def test_list_by_year_invalid_inputs():
+    collection = BookCollection()
+    with pytest.raises(TypeError):
+        collection.list_by_year("2000", 2010)

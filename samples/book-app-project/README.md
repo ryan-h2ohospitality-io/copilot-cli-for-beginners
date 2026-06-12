@@ -19,6 +19,7 @@ It can add, remove, and list books. Also mark them as read.
 
 * `book_app.py` - Main CLI entry point
 * `books.py` - BookCollection class with data logic
+  * Developer API: BookCollection.list_by_year(start, end) — returns books whose publication year is within the inclusive range [start, end].
 * `utils.py` - Helper functions for UI and input
 * `data.json` - Sample book data
 * `tests/test_books.py` - Starter pytest tests
