@@ -1,4 +1,4 @@
-def print_menu():
+def print_menu() -> None:
     print("\n📚 Book Collection App")
     print("1. Add a book")
     print("2. List books")
@@ -24,7 +24,7 @@ def get_user_choice() -> str:
         return choice
 
 
-def get_book_details():
+def get_book_details() -> tuple[str, str, int]:
     """Prompt the user for book details and return them as a tuple.
 
     Behavior and prompts:
@@ -60,7 +60,7 @@ def get_book_details():
     return title, author, year
 
 
-def print_books(books):
+def print_books(books: list) -> None:
     if not books:
         print("No books in your collection.")
         return

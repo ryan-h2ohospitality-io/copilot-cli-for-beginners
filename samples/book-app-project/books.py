@@ -14,11 +14,11 @@ class Book:
 
 
 class BookCollection:
-    def __init__(self):
+    def __init__(self) -> None:
         self.books: List[Book] = []
         self.load_books()
 
-    def load_books(self):
+    def load_books(self) -> None:
         """Load books from the JSON file if it exists."""
         try:
             with open(DATA_FILE, "r") as f:
@@ -30,13 +30,26 @@ class BookCollection:
             print("Warning: data.json is corrupted. Starting with empty collection.")
             self.books = []
 
-    def save_books(self):
+    def save_books(self) -> None:
         """Save the current book collection to JSON."""
-        with open(DATA_FILE, "w") as f:
-            json.dump([asdict(b) for b in self.books], f, indent=2)
+        try:
+            with open(DATA_FILE, "w") as f:
+                json.dump([asdict(b) for b in self.books], f, indent=2)
+        except OSError as e:
+            # Surface I/O errors so callers (CLI/tests) can handle them.
+            raise IOError(f"Failed to write data file {DATA_FILE}: {e}") from e
 
     def add_book(self, title: str, author: str, year: int) -> Book:
-        book = Book(title=title, author=author, year=year)
+        """Add a new book to the collection after validating inputs.
+
+        Raises ValueError for invalid title or year, IOError for file write errors.
+        """
+        if not isinstance(title, str) or not title.strip():
+            raise ValueError("title must be a non-empty string")
+        if not isinstance(year, int) or year < 0:
+            raise ValueError("year must be a non-negative integer")
+
+        book = Book(title=title.strip(), author=author.strip(), year=year)
         self.books.append(book)
         self.save_books()
         return book

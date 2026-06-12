@@ -1,12 +1,13 @@
 import sys
-from books import BookCollection
+from typing import List
+from books import BookCollection, Book
 
 
 # Global collection instance
-collection = BookCollection()
+collection: BookCollection = BookCollection()
 
 
-def show_books(books):
+def show_books(books: List[Book]) -> None:
     """Display books in a user-friendly format."""
     if not books:
         print("No books found.")
@@ -21,15 +22,19 @@ def show_books(books):
     print()
 
 
-def handle_list():
+def handle_list() -> None:
     books = collection.list_books()
     show_books(books)
 
 
-def handle_add():
+def handle_add() -> None:
     print("\nAdd a New Book\n")
 
     title = input("Title: ").strip()
+    if not title:
+        print("Title is required. Book not added.")
+        return
+
     author = input("Author: ").strip()
     year_str = input("Year: ").strip()
 
@@ -38,38 +43,57 @@ def handle_add():
         collection.add_book(title, author, year)
         print("\nBook added successfully.\n")
     except ValueError as e:
-        print(f"\nError: {e}\n")
+        print(f"\nInvalid input: {e}\n")
+    except IOError as e:
+        print(f"\nFailed to save book: {e}\n")
 
 
-def handle_remove():
+def handle_remove() -> None:
     print("\nRemove a Book\n")
 
     title = input("Enter the title of the book to remove: ").strip()
-    collection.remove_book(title)
+    if not title:
+        print("Title is required to remove a book.")
+        return
+    try:
+        removed = collection.remove_book(title)
+        if removed:
+            print("\nBook removed.\n")
+        else:
+            print("\nBook not found.\n")
+    except IOError as e:
+        print(f"\nFailed to update data file: {e}\n")
 
-    print("\nBook removed if it existed.\n")
 
-
-def handle_find():
+def handle_find() -> None:
     print("\nFind Books by Author\n")
 
     author = input("Author name: ").strip()
+    if not author:
+        print("Author name required.")
+        return
     books = collection.find_by_author(author)
 
     show_books(books)
 
 
-def handle_mark_as_read():
+def handle_mark_as_read() -> None:
     print("\nMark Book as Read\n")
     title = input("Enter the title of the book to mark as read: ").strip()
-    success = collection.mark_as_read(title)
-    if success:
-        print(f'\nMarked "{title}" as read.\n')
-    else:
-        print(f'\nBook titled "{title}" was not found.\n')
+    if not title:
+        print("Title is required.")
+        return
+    try:
+        success = collection.mark_as_read(title)
+        if success:
+            print(f'\nMarked "{title}" as read.\n')
+        else:
+            print(f'\nBook titled "{title}" was not found.\n')
+    except IOError as e:
+        print(f"\nFailed to update data file: {e}\n")
 
 
-def show_help():
+def show_help() -> None:
     print("""
 Book Collection Helper
 
@@ -82,7 +106,7 @@ Commands:
 """)
 
 
-def main():
+def main() -> None:
     if len(sys.argv) < 2:
         show_help()
         return
