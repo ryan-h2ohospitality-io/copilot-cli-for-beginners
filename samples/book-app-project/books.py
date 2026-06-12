@@ -80,8 +80,18 @@ class BookCollection:
         return [b for b in self.books if start <= b.year <= end]
 
     def find_book_by_title(self, title: str) -> Optional[Book]:
+        """Find a book by exact title match (case-insensitive).
+
+        Trims surrounding whitespace from the query and validates the input type.
+        Returns the first matching Book or None if not found.
+        """
+        if not isinstance(title, str):
+            raise TypeError("title must be a string")
+        query = title.strip()
+        if not query:
+            return None
         for book in self.books:
-            if book.title.lower() == title.lower():
+            if book.title.lower() == query.lower():
                 return book
         return None
 
