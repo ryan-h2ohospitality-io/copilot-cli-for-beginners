@@ -59,6 +59,16 @@ def handle_find():
     show_books(books)
 
 
+def handle_mark_as_read():
+    print("\nMark Book as Read\n")
+    title = input("Enter the title of the book to mark as read: ").strip()
+    success = collection.mark_as_read(title)
+    if success:
+        print(f'\nMarked "{title}" as read.\n')
+    else:
+        print(f'\nBook titled "{title}" was not found.\n')
+
+
 def show_help():
     print("""
 Book Collection Helper
@@ -87,6 +97,8 @@ def main():
         handle_remove()
     elif command == "find":
         handle_find()
+    elif command == "mark-as-read":
+        handle_mark_as_read()
     elif command == "help":
         show_help()
     else:
