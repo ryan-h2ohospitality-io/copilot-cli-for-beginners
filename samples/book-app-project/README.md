@@ -50,3 +50,9 @@ python -m pytest tests/
 * Not production-ready (obviously)
 * Some code could be improved
 * Could add more commands later
+
+## Year validation
+
+* Programmatic/API: BookCollection.add_book(title, author, year) accepts year == 0 to denote an unknown publication year. It rejects negative values and any year greater than the current year (i.e., future years).
+* CLI behavior: The interactive "add" flow requires entering a numeric publication year between 1 and the current year (inclusive). The prompt will re-ask on invalid input. To record an unknown year (0), edit `data.json` directly or use the programmatic API.
+* Rationale: This preserves existing sample data that uses 0 for unknown while preventing accidental future-year entries. Tests cover these cases.
