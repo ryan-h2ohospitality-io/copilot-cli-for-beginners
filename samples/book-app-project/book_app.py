@@ -1,6 +1,7 @@
 import sys
 from typing import List
 from books import BookCollection, Book
+from utils import get_book_details
 
 
 # Global collection instance
@@ -30,16 +31,8 @@ def handle_list() -> None:
 def handle_add() -> None:
     print("\nAdd a New Book\n")
 
-    title = input("Title: ").strip()
-    if not title:
-        print("Title is required. Book not added.")
-        return
-
-    author = input("Author: ").strip()
-    year_str = input("Year: ").strip()
-
     try:
-        year = int(year_str) if year_str else 0
+        title, author, year = get_book_details()
         collection.add_book(title, author, year)
         print("\nBook added successfully.\n")
     except ValueError as e:

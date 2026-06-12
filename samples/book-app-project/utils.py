@@ -31,15 +31,14 @@ def get_book_details() -> tuple[str, str, int]:
     - Title: required. The function will repeatedly prompt until a non-empty title
       is provided.
     - Author: optional. An empty string is accepted if the user provides no input.
-    - Publication year: optional. The function attempts to parse the entered value
-      as an integer; if parsing fails, it prints a message and defaults the year to 0.
+    - Publication year: required. The function repeatedly prompts until the user
+      enters an integer between 1 and the current year (inclusive).
 
     Returns:
       tuple[str, str, int]: (title, author, year)
 
     Side effects:
-    - Prints prompt and validation messages to stdout. Does not raise exceptions for
-      invalid user input; invalid year input is handled by defaulting to 0.
+    - Prints prompt and validation messages to stdout. Does not accept invalid years.
     """
     while True:
         title = input("Enter book title: ").strip()
@@ -50,12 +49,22 @@ def get_book_details() -> tuple[str, str, int]:
 
     author = input("Enter author: ").strip()
 
-    year_input = input("Enter publication year: ").strip()
-    try:
-        year = int(year_input)
-    except ValueError:
-        print("Invalid year. Defaulting to 0.")
-        year = 0
+    import datetime
+    current_year = datetime.date.today().year
+    while True:
+        year_input = input(f"Enter publication year (1-{current_year}): ").strip()
+        if not year_input:
+            print("Year is required. Please enter a valid year.")
+            continue
+        try:
+            year = int(year_input)
+        except ValueError:
+            print("Invalid year. Please enter a numeric year.")
+            continue
+        if year < 1 or year > current_year:
+            print(f"Year must be between 1 and {current_year}.")
+            continue
+        break
 
     return title, author, year
 

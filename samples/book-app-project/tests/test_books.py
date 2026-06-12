@@ -96,3 +96,27 @@ def test_list_by_year_invalid_inputs():
     collection = BookCollection()
     with pytest.raises(TypeError):
         collection.list_by_year("2000", 2010)
+
+
+def test_add_book_rejects_future_year():
+    import datetime
+    collection = BookCollection()
+    future = datetime.date.today().year + 1
+    with pytest.raises(ValueError):
+        collection.add_book("Future Book", "Author", future)
+
+
+def test_add_book_rejects_zero_and_negative_year():
+    collection = BookCollection()
+    with pytest.raises(ValueError):
+        collection.add_book("Zero Year", "Author", 0)
+    with pytest.raises(ValueError):
+        collection.add_book("Negative Year", "Author", -100)
+
+
+def test_add_book_accepts_current_year():
+    import datetime
+    collection = BookCollection()
+    y = datetime.date.today().year
+    book = collection.add_book("Current Year", "Author", y)
+    assert book.year == y

@@ -46,8 +46,13 @@ class BookCollection:
         """
         if not isinstance(title, str) or not title.strip():
             raise ValueError("title must be a non-empty string")
-        if not isinstance(year, int) or year < 0:
-            raise ValueError("year must be a non-negative integer")
+        import datetime
+        current_year = datetime.date.today().year
+        # Enforce a publication year between 1 and the current year (inclusive).
+        if not isinstance(year, int) or year < 1:
+            raise ValueError(f"year must be an integer between 1 and {current_year} (inclusive)")
+        if year > current_year:
+            raise ValueError(f"year cannot be in the future (max {current_year})")
 
         book = Book(title=title.strip(), author=author.strip(), year=year)
         self.books.append(book)
