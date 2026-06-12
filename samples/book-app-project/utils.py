@@ -8,11 +8,34 @@ def print_menu():
 
 
 def get_user_choice() -> str:
-    return input("Choose an option (1-5): ").strip()
+    """Prompt until a valid numeric choice (1-5) is entered and return it as a string."""
+    while True:
+        choice = input("Choose an option (1-5): ").strip()
+        if not choice:
+            print("No input provided. Please enter a number between 1 and 5.")
+            continue
+        if not choice.isdigit():
+            print("Invalid input. Please enter a number between 1 and 5.")
+            continue
+        num = int(choice)
+        if num < 1 or num > 5:
+            print("Choice out of range. Please enter a number between 1 and 5.")
+            continue
+        return choice
 
 
 def get_book_details():
-    title = input("Enter book title: ").strip()
+    """Prompt for book details; require a non-empty title.
+
+    Returns a tuple (title, author, year).
+    """
+    while True:
+        title = input("Enter book title: ").strip()
+        if not title:
+            print("Title cannot be empty. Please enter a valid title.")
+            continue
+        break
+
     author = input("Enter author: ").strip()
 
     year_input = input("Enter publication year: ").strip()
